@@ -14,7 +14,7 @@ class SeamCarver:
         
     def energyOfPixel(self, row, col):
         if row == 0 or row == self.img.shape[0]-1 or col == 0 or col == self.img.shape[1]-1:
-                return 1000
+            return 1000
         if len(img.shape) == 2:
             en = ((self.img[row+1][col] - self.img[row-1][col])**2 +
             (self.img[row][col+1] - self.img[row][col-1])**2)
@@ -112,13 +112,18 @@ class SeamCarver:
 
 if __name__ == '__main__':
     import time
-    img = plt.imread('asdf.jpg')
+    img_name = input("Please name the image file: ")
+    seams = int(input("Vertical seams to remove: "))
+    img = plt.imread(img_name)
+    if "png" in img_name:
+        img = np.array(img*255, dtype='uint8')
     sc = SeamCarver(img)
     a = time.time()
-    for i in range(2):
+    for i in range(seams):
         sc.removeSeam()
-    sc.showImage()
-    plt.imsave('asdf2.jpg', sc.img)
     print("Elapsed time: {}".format((time.time()-a)/60))
+    sc.showImage()
+    out_name = input("Save as: ")
+    plt.imsave(out_name, sc.img)
     
         
