@@ -32,7 +32,6 @@ class SeamCarver:
                 self.energies[i][j] = self.energyOfPixel(i, j)
 
     def showEnergyImg(self):
-        self.energies = energy_img/np.max(energy_img)*255
         plt.imshow(self.energies)
         plt.show()
 
@@ -104,8 +103,10 @@ class SeamCarver:
         for i in range(self.energies.shape[0]):
             self.energies[i, xIndices[self.energies.shape[0]-i-1]] = self.energyOfPixel(i, xIndices[self.energies.shape[0]-i-1]) 
     def showImage(self):
-        plt.imshow(self.img/255)
+        plt.imshow(self.img)
         plt.show()
+    def getImage(self):
+        return self.img
 
     
     
@@ -113,17 +114,26 @@ class SeamCarver:
 if __name__ == '__main__':
     import time
     img_name = input("Please name the image file: ")
-    seams = int(input("Vertical seams to remove: "))
+    v_seams = int(input("Vertical seams to remove: "))
+    h_seams = int(input("Horizontal seams to remove: "))
     img = plt.imread(img_name)
     if "png" in img_name:
         img = np.array(img*255, dtype='uint8')
     sc = SeamCarver(img)
     a = time.time()
-    for i in range(seams):
+    for i in range(v_seams):
+        sc.removeSeam()
+    img = sc.getImage()
+    sc = SeamCarver(np.transpose(img, (1,0,2)))
+    for i in range(h_seams):
         sc.removeSeam()
     print("Elapsed time: {}".format((time.time()-a)/60))
-    sc.showImage()
+    #sc.showImage()
+    img = sc.getImage()
+    img = np.transpose(img, (1,0,2))
+    plt.imshow(img)
+    plt.show()
     out_name = input("Save as: ")
-    plt.imsave(out_name, sc.img)
+    plt.imsave(out_name, img)
     
         
