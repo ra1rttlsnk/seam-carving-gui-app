@@ -102,6 +102,10 @@ class SeamCarver:
     def recalculateEnergyAlongSeam(self,xIndices):
         for i in range(self.energies.shape[0]):
             self.energies[i, xIndices[self.energies.shape[0]-i-1]] = self.energyOfPixel(i, xIndices[self.energies.shape[0]-i-1]) 
+            if self.energies.shape[0]-i-2 >= 0:
+                self.energies[i, xIndices[self.energies.shape[0]-i-2]] = self.energyOfPixel(i, xIndices[self.energies.shape[0]-i-2]) 
+
+
     def showImage(self):
         plt.imshow(self.img)
         plt.show()
